@@ -5,7 +5,7 @@ const outpassController = require('../controllers/outpassController');
 
 router.post('/request', outpassController.requestOutpass);
 router.get('/status', authMiddleware, outpassController.getOutpassStatus);
-router.post('/handle', authMiddleware, outpassController.handleOutpass);
+router.get('/pending', authMiddleware, outpassController.getAllOutpasses);
 router.get('/approved', authMiddleware, outpassController.getApprovedOutpasses);
 
 module.exports = router;

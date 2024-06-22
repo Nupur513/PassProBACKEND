@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 exports.requestOutpass = async (req, res) => {
   const { userId, outDate, returnDate, reason, destination } = req.body;
-
+  console.log('Request outpass:', req.body)
   try {
     const user = await User.findById(userId);
     if (!user || user.role !== 'student') {
@@ -67,3 +67,18 @@ exports.getApprovedOutpasses = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getAllOutpasses  = async (req, res) => {
+  const { role } = req.user;
+
+  if (role !== 'warden') {
+    return res.status(403).json({ message: 'Only wardens can access this resource' });
+  }
+
+  try {
+    const allOutpasses = await Outpass.find().populate('student', 'username fullName email');
+    res.json(allOutpasses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}

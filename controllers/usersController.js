@@ -43,6 +43,7 @@ exports.login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         const token = jwt.sign({ userId: user._id, role: user.role }, 'your_jwt_secret');
+        //res.setHeader('Authorization', `Bearer ${token}`);
         res.json({ token, role: user.role }); // Send role along with token
     } catch (error) {
         res.status(500).json({ error: error.message });
