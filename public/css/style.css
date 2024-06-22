@@ -1,0 +1,75 @@
+/* Resetting margin and padding for body and html */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000; /* Black background */
+    font-family: 'Poppins', sans-serif; /* Using Poppins from Google Fonts */
+    color: #FFFFFF; /* White text */
+    text-align: center;
+}
+
+/* Styling the splash container */
+.splash-container {
+    max-width: 800px;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Styling the main heading */
+.splash-container h1 {
+    font-size: 60px;
+    margin-bottom: 20px;
+    color: #FFA726; /* Orange */
+    font-family: 'Roboto Slab', serif; /* Using Roboto Slab from Google Fonts */
+    font-weight: 600; /* Semi-bold */
+    animation: slideIn 1.5s ease-in-out;
+}
+
+/* Keyframes for slide-in animation */
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Styling the subtitle */
+.splash-container p {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #FFFFFF; /* White text */
+    font-style: italic; /* Italic style */
+    line-height: 1.6; /* Increased line height for better readability */
+}
+
+/* Styling the start button */
+.splash-container a {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #FFFFFF; /* White text */
+    background-color: #FFA726; /* Orange */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif; /* Ensuring consistency with other text */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Hover effect for the start button */
+.splash-container a:hover {
+    background-color: #FF9800; /* Darker orange on hover */
+    transform: scale(1.05);
+}
