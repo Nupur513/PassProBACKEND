@@ -7,5 +7,6 @@ router.post('/request', outpassController.requestOutpass);
 router.get('/status', authMiddleware, outpassController.getOutpassStatus);
 router.get('/pending', authMiddleware, outpassController.getAllOutpasses);
 router.get('/approved', authMiddleware, outpassController.getApprovedOutpasses);
+router.post('/handle', authMiddleware, outpassController.handleOutpass);
 
 module.exports = router;

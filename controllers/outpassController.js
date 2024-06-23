@@ -19,32 +19,46 @@ exports.requestOutpass = async (req, res) => {
 };
 
 exports.handleOutpass = async (req, res) => {
-  const { userId, role } = req.user;
+  const { role } = req.user;
   const { outpassId, status, comment } = req.body;
 
+  if (role !== 'warden') {
+    return res.status(403).json({ message: 'Only wardens can approve or reject outpass requests' });
+  }
+
+  if (!['approved', 'rejected'].includes(status)) {
+    return res.status(400).json({ message: 'Invalid status. Only "approved" or "rejected" are allowed.' });
+  }
+
   try {
+    const update = { 
+      status: status, 
+      wardenComment: comment || '' 
+    };
+
     const outpass = await Outpass.findById(outpassId);
+
     if (!outpass) {
       return res.status(404).json({ message: 'Outpass not found' });
     }
 
-    if (role !== 'warden') {
-      return res.status(403).json({ message: 'Only wardens can approve or reject outpass requests' });
-    }
+    // Update the outpass status and comment
+    await Outpass.updateOne(
+      { _id: outpassId },
+      { $set: update },
+      { runValidators: false } // Bypass all validations
+    );
 
-    if (!['approved', 'rejected'].includes(status)) {
-      return res.status(400).json({ message: 'Invalid status. Only "approved" or "rejected" are allowed.' });
-    }
+    // Fetch the updated outpass
+    const updatedOutpass = await Outpass.findById(outpassId);
 
-    outpass.status = status;
-    outpass.wardenComment = comment || '';
-    await outpass.save();
-    res.json({ message: 'Outpass status updated!', outpass });
+    res.json({ message: 'Outpass status updated successfully!', outpass: updatedOutpass });
   } catch (error) {
     console.error('Error handling outpass:', error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.getOutpassStatus = async (req, res) => {
   const { userId } = req.user;
@@ -56,6 +70,8 @@ exports.getOutpassStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 exports.getApprovedOutpasses = async (req, res) => {
   const { role } = req.user;
@@ -71,6 +87,7 @@ exports.getApprovedOutpasses = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.getAllOutpasses = async (req, res) => {
   const { role } = req.user;
