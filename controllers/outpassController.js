@@ -32,10 +32,14 @@ exports.handleOutpass = async (req, res) => {
       return res.status(403).json({ message: 'Only wardens can approve or reject outpass requests' });
     }
 
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status. Only "approved" or "rejected" are allowed.' });
+    }
+
     outpass.status = status;
     outpass.wardenComment = comment || '';
     await outpass.save();
-    res.json({ message: 'Outpass status updated!' });
+    res.json({ message: 'Outpass status updated!', outpass });
   } catch (error) {
     console.error('Error handling outpass:', error);
     res.status(500).json({ error: error.message });
@@ -68,7 +72,7 @@ exports.getApprovedOutpasses = async (req, res) => {
   }
 };
 
-exports.getAllOutpasses  = async (req, res) => {
+exports.getAllOutpasses = async (req, res) => {
   const { role } = req.user;
 
   if (role !== 'warden') {
@@ -76,9 +80,10 @@ exports.getAllOutpasses  = async (req, res) => {
   }
 
   try {
-    const allOutpasses = await Outpass.find().populate('student', 'username fullName email');
-    res.json(allOutpasses);
+    // Fetch only pending outpasses
+    const pendingOutpasses = await Outpass.find({ status: 'pending' }).populate('student', 'username fullName email');
+    res.json(pendingOutpasses);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
