@@ -104,3 +104,22 @@ exports.getAllOutpasses = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.viewMyOutpasses = async (req, res) => {
+  const { userId } = req.user;
+
+  try {
+    const currentDate = new Date(); 
+    currentDate.setHours(0, 0, 0, 0);
+    const outpasses = await Outpass.find({ 
+      student: userId, 
+      outDate: { $gte: currentDate } 
+    })
+    .populate('student', 'username fullName email')
+    .sort({ outDate: 1 }); 
+
+    res.json(outpasses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
