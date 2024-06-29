@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
+const cors = require('cors'); // Import CORS middleware
 const { logger, logevents } = require('./middleware/logger');
 const errorhandler = require('./middleware/errorhandler');
 const connectDB = require('./config/dbConn');
@@ -19,7 +19,11 @@ const app = express();
 
 // Middleware
 app.use(logger);
-app.use(cors());
+app.use(cors({
+  origin: 'https://passpro.onrender.com', // Replace with your frontend URL
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
