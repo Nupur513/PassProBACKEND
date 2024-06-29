@@ -20,7 +20,7 @@ const app = express();
 // Middleware
 app.use(logger);
 app.use(cors({
-  origin: 'https://pass-pro-frontend-r1rf.vercel.app', // Replace with your frontend URL
+  origin: 'http://localhost:3000', // Replace with your frontend URL
   methods: 'GET,POST,PUT,DELETE',
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
