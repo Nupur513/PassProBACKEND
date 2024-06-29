@@ -20,7 +20,7 @@ const app = express();
 // Middleware
 app.use(logger);
 app.use(cors({
-  origin: 'https://outpasspro.onrender.com', // Replace with your frontend URL
+  origin: 'https://outpasspro.onrender.com/api', // Replace with your frontend URL
   methods: 'GET,POST,PUT,DELETE',
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
